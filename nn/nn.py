@@ -106,12 +106,15 @@ class NeuralNetwork:
             Z_curr: ArrayLike
                 Current layer linear transformed matrix.
         """
-        # Z = 
+        # z^{l+1} = W^{(l)} * a^{(l)} + b^{(l)}
+        # a^{(l+1)} = f(z^{(l + 1)})
         z = np.matmul( W_curr, A_prev ) + b_curr 
         if activation == "sigmoid":
-            return self._sigmoid(z)
+            A_curr = self._sigmoid(z)
         elif activation == "relu":
-            return self._relu(z)
+            A_curr = self._relu(z)
+        Z_curr = z
+        return A_curr, Z_curr
 
     def forward(self, X: ArrayLike) -> Tuple[ArrayLike, Dict[str, ArrayLike]]:
         """
@@ -127,7 +130,6 @@ class NeuralNetwork:
             cache: Dict[str, ArrayLike]:
                 Dictionary storing Z and A matrices from `_single_forward` for use in backprop.
         """
-
         pass
 
     def _single_backprop(
@@ -268,7 +270,9 @@ class NeuralNetwork:
             dZ: ArrayLike
                 Partial derivative of current layer Z matrix.
         """
-        pass
+        # derivative of sigmoid function
+        # \frac{\partial \sigma}{\partial \Z} = \sigma (Z) * (1-\sigma (Z))
+        return (self._sigmoid(Z) * ( 1 - self._sigmoid(Z)) ) # * dA ?
 
     def _relu(self, Z: ArrayLike) -> ArrayLike:
         """
@@ -282,6 +286,7 @@ class NeuralNetwork:
             nl_transform: ArrayLike
                 Activation function output.
         """
+        # zero from -infinity to 0, linear 0 to +infinity
         return np.maximum(Z, np.zeros_like(Z))
 
     def _relu_backprop(self, dA: ArrayLike, Z: ArrayLike) -> ArrayLike:
@@ -298,7 +303,8 @@ class NeuralNetwork:
             dZ: ArrayLike
                 Partial derivative of current layer Z matrix.
         """
-        pass
+        # derivatie of relu 
+        return (self._relu(Z) > 0 ) * dA
 
     def _binary_cross_entropy(self, y: ArrayLike, y_hat: ArrayLike) -> float:
         """
@@ -314,7 +320,22 @@ class NeuralNetwork:
             loss: float
                 Average loss over mini-batch.
         """
-        pass
+        # binary cross entropy loss equation 
+        # binary cross entropy loss = - \frac{1}{N} \Sum^N_{i=1} { y_i * \log( p(y_i)) + (1 - y_i) * \log(1 - p(y_i) )   }
+        N = len(y_hat) # number of instances 
+        
+        # edit values of y_pred to prevent divide by zero error
+        epsilon = 1e-15  # small constant to avoid log(0)
+        for i in range(len(y_hat)):
+            if y[i] == 1:
+                y[i] -= epsilon
+            if y[i] == 0:
+                y[i] += epsilon
+
+        # mean loss using binary cross entropy loss equation 
+        mean_loss = -1/N * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
+        return mean_loss
+
 
     def _binary_cross_entropy_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike:
         """
@@ -330,6 +351,12 @@ class NeuralNetwork:
             dA: ArrayLike
                 partial derivative of loss with respect to A matrix.
         """
+        # calculate gradient (https://web.stanford.edu/~jurafsky/slp3/5.pdf#page=22&zoom=100,189,596)
+        # gradient = \frac{ \partial L }{\partial w } = \sigma( w * x  - y_i ) * x_j 
+
+
+
+        # return np.matmul(X.T, sigmoid - y_true) / len(y_true)
         pass
 
     def _mean_squared_error(self, y: ArrayLike, y_hat: ArrayLike) -> float:
@@ -346,7 +373,9 @@ class NeuralNetwork:
             loss: float
                 Average loss of mini-batch.
         """
-        pass
+        # mean squared error equation 
+        # \frac{1}{N} \Sum_1^N{ (y - y_hat)^2 }
+        return np.mean( (y - y_hat)**2 )
 
     def _mean_squared_error_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike:
         """
