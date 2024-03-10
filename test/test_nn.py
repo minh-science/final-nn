@@ -20,14 +20,14 @@ def test_predict():
 
 def test_binary_cross_entropy():
     # create new y and y_hat with a known loss function value
-    y_true_pytest = np.array([1,2,3])
-    y_pred_pytest = np.array([0.1,0.2,0.3])
+    y_true_pytest = np.array([5])
+    y_pred_pytest = np.array([0.5])
     loss_truth = 0
 
     # check if loss function returns values close to true values 
     loss_pytest = nn_test._binary_cross_entropy(y= y_true_pytest, y_hat=y_pred_pytest) 
     print(loss_pytest, loss_truth)
-    print(np.isclose(loss_truth, loss_pytest, 0.000001))
+    # print(np.isclose(loss_truth, loss_pytest, 0.000001))
     # assert np.isclose(loss_truth, loss_pytest, 0.000001)
 test_binary_cross_entropy()
 
