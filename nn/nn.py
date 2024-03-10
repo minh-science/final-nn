@@ -324,7 +324,7 @@ class NeuralNetwork:
         # binary cross entropy loss = - \frac{1}{N} \Sum^N_{i=1} { y_i * \log( p(y_i)) + (1 - y_i) * \log(1 - p(y_i) )   }
         N = len(y_hat) # number of instances 
         
-        # edit values of y_pred to prevent divide by zero error
+        # edit values of y_hat to prevent divide by zero error
         epsilon = 1e-15  # small constant to avoid log(0)
         for i in range(len(y_hat)):
             if y[i] == 1:
@@ -333,7 +333,6 @@ class NeuralNetwork:
                 y[i] += epsilon
 
         # mean loss using binary cross entropy loss equation, np.log corresponds to natrual log 
-        print(y,y_hat, N)
         mean_loss = -1/N * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
         return mean_loss
 
@@ -352,11 +351,25 @@ class NeuralNetwork:
             dA: ArrayLike
                 partial derivative of loss with respect to A matrix.
         """
+        # edit values of y and y_hat to prevent divide by zero error
+        epsilon = 1e-15  # small constant to avoid divide by 0 error 
+        for i in range(len(y)):
+            if y[i] == 1:
+                y[i] -= epsilon
+            if y[i] == 0:
+                y[i] += epsilon
+
+        for i in range(len(y)):
+            if y_hat[i] == 1:
+                y_hat[i] -= epsilon
+            if y_hat[i] == 0:
+                y_hat[i] += epsilon
+                
         # derivative of binary cross entropy
         # L(y,y_hat) = - \frac{1}{N} \Sum^N_{i=1} { y * \log(y_hat) + (1 - y) * \log(1 - y_hat )   }
         # \frac{\partial L}{\partial y_hat} =  \left( ( y * 1/y_hat ) + (1 - y) \frac{-1}{1 - y_hat} \right) (- \frac{1}{N})
         # = - \frac{1}{N} ( \frac{y}{y_hat} - \frac{1 - y}{1 -y_hat} )
-        return - 1/self._batch_size *  np.divide(y, y_hat) - np.divide( 1 - y, 1 - y_hat ) # N is batch size 
+        return - 1/self._batch_size * ( np.divide(y, y_hat) - np.divide( 1 - y, 1 - y_hat ) ) # N is batch size 
 
     def _mean_squared_error(self, y: ArrayLike, y_hat: ArrayLike) -> float:
         """
