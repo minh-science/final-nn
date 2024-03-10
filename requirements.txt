@@ -1,5 +1,4 @@
 pytest
 numpy
 tensorflow
-sklearn
 scikit-learn
