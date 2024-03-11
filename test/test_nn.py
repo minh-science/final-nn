@@ -22,11 +22,12 @@ def test_single_forward(): # COMPLETE
     assert np.allclose( sf_sigmoid_truth, nn_test._single_forward(W,b,a,activation_sigmoid) ), "error in _single_forward (sigmoid activation)"
 test_single_forward()
 
-def test_forward():
+def test_forward(): # FINISH AFTER COMPLETING NN
     # input nn_arch from description of nn_arch
     X = np.ones(64)
     # nn_arch_test = [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}]
     nn_test.forward(X)
+    pass # should pass for only the first layer (64) for now, need to change this to work on second layer (32)
 test_forward()
 
 def test_single_backprop():
