@@ -32,7 +32,19 @@ def test_forward(): # FINISH AFTER COMPLETING NN
 # test_forward() # commented out for pytest xfail
 
 def test_single_backprop():
-    pass
+    # initalize test variables 
+    W_curr = np.array([2])
+    b_curr = np.array([0.5])
+    Z_curr = np.array([1])
+    A_prev = np.array([1])
+    dA_curr = np.array([1])
+    activation_relu = "relu"
+    activation_sigmoid = "sigmoid"
+
+    # dA_prev = 
+    bp_relu_test = nn_test._single_backprop(W_curr, b_curr, Z_curr, A_prev, dA_curr, activation_relu)
+    print(bp_relu_test)
+test_single_backprop()
 
 def test_predict():
     pass

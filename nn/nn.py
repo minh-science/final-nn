@@ -195,10 +195,21 @@ class NeuralNetwork:
         elif activation_curr == "relu":
             dZ_curr = self._relu_backprop(dA_curr, Z_curr)
 
-        # update partial derivative matrices 
-        dA_prev = np.dot( dZ_curr, A_prev) # wrt previous layer activation matrix
-        dW_curr = np.dot( dZ_curr, W_curr) # wrt current layer weight matrix 
-        db_curr = np.dot( Z_curr, b_curr) # wrt current layer bias matrix 
+        # originial activation function 
+        # f_{activation}(Z)
+        # Z = W_curr * A_prev + b_curr
+
+        # partial derivative with respect to previous layer activation matrix
+        # \frac{\partial f_{activation}}{\partial A} = W_curr^T \cdot dZ_curr
+        dA_prev = np.dot(W_curr.T , dZ_curr) 
+
+        # parital derivative of loss with respect to weights 
+        # \frac{\partial f_{activation}}{\partial W} = \frac{1}{m} \cdot dZ_{curr} \cdot A^T_prev
+        dW_curr = np.dot(dZ_curr, A_prev.T) 
+
+        # partial derivative of loss with respect to current bias matrix 
+        # \frac{\partial f_{activation}}{\partial b} = \frac{1}{m} \cdot \Sum_{i}^m dZ_{curr}
+        db_curr = np.sum(dZ_curr, axis=1, keepdims=True) 
 
         return dA_prev, dW_curr, db_curr
 
@@ -219,6 +230,8 @@ class NeuralNetwork:
             grad_dict: Dict[str, ArrayLike]
                 Dictionary containing the gradient information from this pass of backprop.
         """
+        grad_dict = {}
+
         for i in range(len(self.arch)):
             pass
 
@@ -260,7 +273,10 @@ class NeuralNetwork:
             per_epoch_loss_val: List[float]
                 List of per epoch loss for validation set.
         """
-        pass
+        per_epoch_loss_train = []
+        per_epoch_loss_val = []
+
+        return per_epoch_loss_train, per_epoch_loss_val
 
     def predict(self, X: ArrayLike) -> ArrayLike:
         """
@@ -274,7 +290,9 @@ class NeuralNetwork:
             y_hat: ArrayLike
                 Prediction from the model.
         """
-        pass
+        output, cache = self.forward(X)
+
+        return output
 
     def _sigmoid(self, Z: ArrayLike) -> ArrayLike:  # COMPLETE
         """
