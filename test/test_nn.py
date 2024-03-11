@@ -47,29 +47,47 @@ def test_binary_cross_entropy_backprop(): # COMPLETE
 test_binary_cross_entropy_backprop()
 
 def test_mean_squared_error(): # COMPLETE
+    # test for MSE = 0
     y_test_0 = np.array([1,2,3,4,5])
     y_hat_test_0 = np.array([1,2,3,4,5])
-    
     MSE_truth_0 = 0
     MSE_test_0 = nn_test._mean_squared_error(y = y_test_0, y_hat= y_hat_test_0)
     assert MSE_truth_0 == MSE_test_0, "minimum squared error does not return zero for y = y_hat"
 
+    # test MSE by comparing with sklearn MSE and calculated MSE 
     y_test = np.array([1, 0, 0])
     y_hat_test = np.array([2, 1, 4])
-    MSE_truth = sklearn.metrics.mean_squared_error(y_true= y_test, y_pred=y_hat_test)
+    MSE_truth = sklearn.metrics.mean_squared_error(y_true= y_test, y_pred=y_hat_test) 
+    MSE_calc = 6 # should return (1 + 1 + 16)/3 = 6
     MSE_test = nn_test._mean_squared_error(y = y_test, y_hat= y_hat_test)
-    assert MSE_truth == MSE_test, "minimum squared error does not return correct result"
+    assert MSE_truth == MSE_test and MSE_calc == MSE_test, "minimum squared error does not return correct result"
 test_mean_squared_error()
 
 
-def test_mean_squared_error_backprop(): # finish this 
+def test_mean_squared_error_backprop(): # COMPLETE
+    # test for dMSE = 0 
     y_test_0 = np.array([1,2,3,4,5])
     y_hat_test_0 = np.array([1,2,3,4,5])
+    nn_test._batch_size = 1 
 
-    dMSE_truth = 0 
-    dMSE_test = nn_test._mean_squared_error_backprop(y = y_test_0, y_hat= y_hat_test_0)
-    print(dMSE_test)
-    
+    dMSE_test_0 = nn_test._mean_squared_error_backprop(y = y_test_0, y_hat= y_hat_test_0)
+    dMSE_truth_0 = np.zeros_like(dMSE_test_0)
+    assert np.allclose( dMSE_test_0, dMSE_truth_0 ), "MSE backpropagation does not return 0 for y = y_hat"
+
+    # test for known dMSE
+    y_true_pytest = np.array([5])
+    y_pred_pytest = np.array([0.5])
+    dMSE_test = nn_test._mean_squared_error_backprop(y = y_true_pytest, y_hat= y_pred_pytest)
+    dMSE_truth = -9
+    assert np.allclose(dMSE_test, dMSE_truth), "MSE backpropagation returns wrong result"
+
+    # test against known dMSE for matrix 
+    y_test = np.array([1, 0, 0])
+    y_hat_test = np.array([2, 1, 4])
+    dMSE_test_mat = nn_test._mean_squared_error_backprop(y = y_test, y_hat= y_hat_test)
+    dMSE_truth_calc = np.array( [2, 2, 8] )
+    assert np.allclose( dMSE_test_mat, dMSE_truth_calc), "MSE backpropagation returns wrong result"
+test_mean_squared_error_backprop()
 
 def test_sample_seqs():
     pass

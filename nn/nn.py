@@ -332,10 +332,9 @@ class NeuralNetwork:
             if y[i] == 0:
                 y[i] += epsilon
 
-        # mean loss using binary cross entropy loss equation, np.log corresponds to natrual log 
-        mean_loss = -1/N * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
-        return mean_loss
-
+        # mean loss using binary cross entropy loss equation, np.log gives natrual log 
+        loss = -1/N * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
+        return loss
 
     def _binary_cross_entropy_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike:
         """
@@ -365,11 +364,12 @@ class NeuralNetwork:
             if y_hat[i] == 0:
                 y_hat[i] += epsilon
                 
-        # derivative of binary cross entropy
+        # derivative of binary cross entropy (with respect to A = y_hat)
         # L(y,y_hat) = - \frac{1}{N} \Sum^N_{i=1} { y * \log(y_hat) + (1 - y) * \log(1 - y_hat )   }
         # \frac{\partial L}{\partial y_hat} =  \left( ( y * 1/y_hat ) + (1 - y) \frac{-1}{1 - y_hat} \right) (- \frac{1}{N})
         # = - \frac{1}{N} ( \frac{y}{y_hat} - \frac{1 - y}{1 -y_hat} )
-        return - 1/self._batch_size * ( np.divide(y, y_hat) - np.divide( 1 - y, 1 - y_hat ) ) # N is batch size 
+        dA = - 1/self._batch_size * ( np.divide(y, y_hat) - np.divide( 1 - y, 1 - y_hat ) ) # N is batch size 
+        return dA
 
     def _mean_squared_error(self, y: ArrayLike, y_hat: ArrayLike) -> float:
         """
@@ -386,8 +386,9 @@ class NeuralNetwork:
                 Average loss of mini-batch.
         """
         # mean squared error equation 
-        # \frac{1}{N} \Sum_1^N{ (y - y_hat)^2 }
-        return np.mean( (y - y_hat)**2 )
+        # MSE(y, y_hat) = \frac{1}{N} \Sum_1^N{ (y - y_hat)^2 }
+        loss = np.mean( (y - y_hat)**2 ) 
+        return loss
 
     def _mean_squared_error_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike:
         """
@@ -403,4 +404,8 @@ class NeuralNetwork:
             dA: ArrayLike
                 partial derivative of loss with respect to A matrix.
         """
-        pass
+        # derivative of mean squared error (with resepct to y_hat)
+        # MSE(y, y_hat) = \frac{1}{N} \Sum_1^N{ (y - y_hat)^2 }
+        # \frac{ \partial MSE(y,y_hat)}{\partial y_hat} = \frac{-2}{N} (y - y_hat)
+        dA = -2/self._batch_size * (y - y_hat) 
+        return dA
