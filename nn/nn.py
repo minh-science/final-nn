@@ -86,7 +86,7 @@ class NeuralNetwork:
         b_curr: ArrayLike,
         A_prev: ArrayLike,
         activation: str
-    ) -> Tuple[ArrayLike, ArrayLike]:
+    ) -> Tuple[ArrayLike, ArrayLike]: # COMPLETE
         """
         This method is used for a single forward pass on a single layer.
 
@@ -106,14 +106,16 @@ class NeuralNetwork:
             Z_curr: ArrayLike
                 Current layer linear transformed matrix.
         """
+        # layer linear transformed matrix
         # z^{l+1} = W^{(l)} * a^{(l)} + b^{(l)}
+        Z_curr = np.matmul( W_curr, A_prev ) + b_curr 
+
+        # activation matrix of current layer Z_curr
         # a^{(l+1)} = f(z^{(l + 1)})
-        z = np.matmul( W_curr, A_prev ) + b_curr 
         if activation == "sigmoid":
-            A_curr = self._sigmoid(z)
+            A_curr = self._sigmoid(Z_curr)
         elif activation == "relu":
-            A_curr = self._relu(z)
-        Z_curr = z
+            A_curr = self._relu(Z_curr)
         return A_curr, Z_curr
 
     def forward(self, X: ArrayLike) -> Tuple[ArrayLike, Dict[str, ArrayLike]]:
@@ -130,7 +132,11 @@ class NeuralNetwork:
             cache: Dict[str, ArrayLike]:
                 Dictionary storing Z and A matrices from `_single_forward` for use in backprop.
         """
-        pass
+        # A is activation matrix 
+        A = X.T 
+        for i in range(len(self.arch)):
+            print(i)
+
 
     def _single_backprop(
         self,
@@ -241,7 +247,7 @@ class NeuralNetwork:
         """
         pass
 
-    def _sigmoid(self, Z: ArrayLike) -> ArrayLike:
+    def _sigmoid(self, Z: ArrayLike) -> ArrayLike:  # COMPLETE
         """
         Sigmoid activation function.
 
@@ -256,7 +262,7 @@ class NeuralNetwork:
         # \sigma(z) = \frac{1}{1 + e^{- z} } 
         return 1 /(1 + np.exp( - Z) ) # sigmoid function of Z 
 
-    def _sigmoid_backprop(self, dA: ArrayLike, Z: ArrayLike):
+    def _sigmoid_backprop(self, dA: ArrayLike, Z: ArrayLike): # COMPLETE
         """
         Sigmoid derivative for backprop.
 
@@ -274,7 +280,7 @@ class NeuralNetwork:
         # \frac{\partial \sigma}{\partial \Z} = \sigma (Z) * (1-\sigma (Z))
         return (self._sigmoid(Z) * ( 1 - self._sigmoid(Z)) ) # * dA ?
 
-    def _relu(self, Z: ArrayLike) -> ArrayLike:
+    def _relu(self, Z: ArrayLike) -> ArrayLike: # COMPLETE
         """
         ReLU activation function.
 
@@ -289,7 +295,7 @@ class NeuralNetwork:
         # zero from -infinity to 0, linear 0 to +infinity
         return np.maximum(Z, np.zeros_like(Z))
 
-    def _relu_backprop(self, dA: ArrayLike, Z: ArrayLike) -> ArrayLike:
+    def _relu_backprop(self, dA: ArrayLike, Z: ArrayLike) -> ArrayLike: # COMPLETE
         """
         ReLU derivative for backprop.
 
@@ -306,7 +312,7 @@ class NeuralNetwork:
         # derivatie of relu 
         return (self._relu(Z) > 0 ) * dA
 
-    def _binary_cross_entropy(self, y: ArrayLike, y_hat: ArrayLike) -> float:
+    def _binary_cross_entropy(self, y: ArrayLike, y_hat: ArrayLike) -> float: # COMPLETE
         """
         Binary cross entropy loss function.
 
@@ -336,7 +342,7 @@ class NeuralNetwork:
         loss = -1/N * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
         return loss
 
-    def _binary_cross_entropy_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike:
+    def _binary_cross_entropy_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike: # COMPLETE
         """
         Binary cross entropy loss function derivative for backprop.
 
@@ -371,7 +377,7 @@ class NeuralNetwork:
         dA = - 1/self._batch_size * ( np.divide(y, y_hat) - np.divide( 1 - y, 1 - y_hat ) ) # N is batch size 
         return dA
 
-    def _mean_squared_error(self, y: ArrayLike, y_hat: ArrayLike) -> float:
+    def _mean_squared_error(self, y: ArrayLike, y_hat: ArrayLike) -> float: # COMPLETE
         """
         Mean squared error loss.
 
@@ -390,7 +396,7 @@ class NeuralNetwork:
         loss = np.mean( (y - y_hat)**2 ) 
         return loss
 
-    def _mean_squared_error_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike:
+    def _mean_squared_error_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike: # COMPLETE
         """
         Mean square error loss derivative for backprop.
 

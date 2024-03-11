@@ -9,7 +9,16 @@ nn_test = nn.NeuralNetwork(nn_arch=[{'input_dim': 64, 'output_dim': 32, 'activat
                             lr = 0.001, seed = 42, batch_size= 10, epochs=3, loss_function="relu", )
 
 def test_single_forward():
-    pass
+    W = np.array([2])
+    b = np.array([0.5])
+    a = np.array([1])
+    activation_relu = "relu"
+    activation_sigmoid = "sigmoid"
+    sf_relu_truth = np.array([2.5]), np.array([2.5])
+    sf_sigmoid_truth = np.array([0.92414182]), np.array([2.5])
+    assert np.allclose( sf_relu_truth, nn_test._single_forward(W,b,a,activation_relu) ), "error in _single_forward (relu activation)"
+    assert np.allclose( sf_sigmoid_truth, nn_test._single_forward(W,b,a,activation_sigmoid) ), "error in _single_forward (sigmoid activation)"
+test_single_forward()
 
 def test_forward():
     pass
