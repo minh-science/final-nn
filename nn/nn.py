@@ -209,7 +209,7 @@ class NeuralNetwork:
 
         # partial derivative of loss with respect to current bias matrix 
         # \frac{\partial f_{activation}}{\partial b} = \frac{1}{m} \cdot \Sum_{i}^m dZ_{curr}
-        db_curr = np.sum(dZ_curr, axis=1, keepdims=True) 
+        db_curr = np.sum(dZ_curr, keepdims=True) # remove "axis=1" 
 
         return dA_prev, dW_curr, db_curr
 
@@ -231,9 +231,18 @@ class NeuralNetwork:
                 Dictionary containing the gradient information from this pass of backprop.
         """
         grad_dict = {}
+        num_layers = len(self.arch)
 
-        for i in range(len(self.arch)):
-            pass
+        output = cache["A" + str(num_layers)] # get output of final layer 
+
+        if self._loss_func == "binary_cross_entropy":
+            dA_curr = self._binary_cross_entropy_backprop(y, y_hat)
+        elif self._loss_func == "mean_squared_error":
+            dA_curr = self._mean_squared_error_backprop(y, y_hat)
+
+        for i in range(0, len(self.arch), -1): # backwards
+            activation = self.arch[i-1]["activation"]
+            
 
     def _update_params(self, grad_dict: Dict[str, ArrayLike]):
         """

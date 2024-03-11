@@ -28,7 +28,7 @@ def test_forward(): # FINISH AFTER COMPLETING NN
     # input nn_arch from description of nn_arch
     X = np.ones(64)
     # nn_arch_test = [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}]
-    nn_test.forward(X)
+    output, cache = nn_test.forward(X)
 # test_forward() # commented out for pytest xfail
 
 def test_single_backprop():
@@ -41,7 +41,7 @@ def test_single_backprop():
     activation_relu = "relu"
     activation_sigmoid = "sigmoid"
 
-    # dA_prev = 
+    # check if single backprop works on test variables
     bp_relu_test = nn_test._single_backprop(W_curr, b_curr, Z_curr, A_prev, dA_curr, activation_relu)
     print(bp_relu_test)
 test_single_backprop()
