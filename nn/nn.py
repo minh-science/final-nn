@@ -235,14 +235,24 @@ class NeuralNetwork:
 
         output = cache["A" + str(num_layers)] # get output of final layer 
 
-        if self._loss_func == "binary_cross_entropy":
+        if self._loss_func == "binary_cross_entropy": 
             dA_curr = self._binary_cross_entropy_backprop(y, y_hat)
         elif self._loss_func == "mean_squared_error":
             dA_curr = self._mean_squared_error_backprop(y, y_hat)
 
-        for i in range(0, len(self.arch), -1): # backwards
-            activation = self.arch[i-1]["activation"]
+        for i in range(0, num_layers, -1): # backwards from final layer 
+            # from _param_dict
+            W_curr = self._param_dict['W' + str(i)] 
+            b_curr = self._param_dict['b' + str(i)]
+            activation_curr = self.arch[i-1]["activation"]
+            # from cache 
+            A_prev = cache["A" + str(i-1)] 
+            Z_curr = cache["Z" + str(i-1)]
             
+            # backprop
+            dA_prev, dW_curr, db_curr = self._single_backprop(W_curr, b_curr, Z_curr, A_prev, dA_curr, activation_curr) # check this ???
+            
+
 
     def _update_params(self, grad_dict: Dict[str, ArrayLike]):
         """
