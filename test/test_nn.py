@@ -5,23 +5,29 @@ import sklearn.metrics
 
 import tensorflow as tf
 
-nn_test = nn.NeuralNetwork(nn_arch=[{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}],
+nn_test = nn.NeuralNetwork(nn_arch=[{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation': 'sigmoid'}],
                             lr = 0.001, seed = 42, batch_size= 10, epochs=3, loss_function="relu", )
 
-def test_single_forward():
+def test_single_forward(): # COMPLETE
     W = np.array([2])
     b = np.array([0.5])
     a = np.array([1])
     activation_relu = "relu"
     activation_sigmoid = "sigmoid"
-    sf_relu_truth = np.array([2.5]), np.array([2.5])
-    sf_sigmoid_truth = np.array([0.92414182]), np.array([2.5])
+    sf_relu_truth = np.array([2.5]), np.array([2.5]) # z = w * a + b, 2 * 1 + 0.5 = 2.5, relu(2.5) = 2.5
+    sf_sigmoid_truth = np.array([0.924141819979]), np.array([2.5]) # z = w * a + b, 2 * 1 + 0.5 = 2.5, sigmoid(2.5) = \frac{1}{1 + e^{-2.5}} = 0.924141819979
+
+    # check if single forward pass works for known values for W, b, and a with available activation functions
     assert np.allclose( sf_relu_truth, nn_test._single_forward(W,b,a,activation_relu) ), "error in _single_forward (relu activation)"
     assert np.allclose( sf_sigmoid_truth, nn_test._single_forward(W,b,a,activation_sigmoid) ), "error in _single_forward (sigmoid activation)"
 test_single_forward()
 
 def test_forward():
-    pass
+    # input nn_arch from description of nn_arch
+    X = np.ones(64)
+    # nn_arch_test = [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}]
+    nn_test.forward(X)
+test_forward()
 
 def test_single_backprop():
     pass

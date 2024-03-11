@@ -80,13 +80,13 @@ class NeuralNetwork:
 
         return param_dict
 
-    def _single_forward(
+    def _single_forward( # COMPLETE
         self,
         W_curr: ArrayLike,
         b_curr: ArrayLike,
         A_prev: ArrayLike,
         activation: str
-    ) -> Tuple[ArrayLike, ArrayLike]: # COMPLETE
+    ) -> Tuple[ArrayLike, ArrayLike]: 
         """
         This method is used for a single forward pass on a single layer.
 
@@ -118,7 +118,7 @@ class NeuralNetwork:
             A_curr = self._relu(Z_curr)
         return A_curr, Z_curr
 
-    def forward(self, X: ArrayLike) -> Tuple[ArrayLike, Dict[str, ArrayLike]]:
+    def forward(self, X: ArrayLike) -> Tuple[ArrayLike, Dict[str, ArrayLike]]: # CHECK AFTER FINISHING BACKPROP
         """
         This method is responsible for one forward pass of the entire neural network.
 
@@ -132,11 +132,28 @@ class NeuralNetwork:
             cache: Dict[str, ArrayLike]:
                 Dictionary storing Z and A matrices from `_single_forward` for use in backprop.
         """
-        # A is activation matrix 
-        A = X.T 
-        for i in range(len(self.arch)):
-            print(i)
+        # example architecture:
+        # [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}]
+        
+        A = X.T # A is current hypothesis matrix
+        cache = {} # cache is a dictionary of Z and A matrices
 
+        cache["A0"] = A # stores 0th activation matrix in cache as 0th hypothesis 
+
+        # iterates through each layer, performs _single_forward 
+        for i in range(len(self.arch)):
+            W_curr = self._param_dict['W' + str(i+1)]
+            b_curr = self._param_dict['b' + str(i+1)]
+            A_prev = A
+            activation = self.arch[i]["activation"]
+            print("layer:", i, "len W:", len(W_curr), "len b:", len(b_curr), activation)
+
+            A_next, Z_next = self._single_forward(W_curr, b_curr, A_prev, activation)
+            cache[f"A{i}"] = A_next 
+            cache[f"Z{i}"] = Z_next
+        output = A_next # outputs the final hypothesis matrix 
+        
+        return output, cache
 
     def _single_backprop(
         self,
@@ -172,7 +189,18 @@ class NeuralNetwork:
             db_curr: ArrayLike
                 Partial derivative of loss function with respect to current layer bias matrix.
         """
-        pass
+        # apply activation functions, \delta = \frac{\partial f_{activation}(Z) }{\partial Z}
+        if activation_curr == "sigmoid":
+            dZ_curr = self._sigmoid_backprop(dA_curr, Z_curr)
+        elif activation_curr == "relu":
+            dZ_curr = self._relu_backprop(dA_curr, Z_curr)
+
+        # update partial derivative matrices 
+        dA_prev = np.dot( dZ_curr, A_prev) # wrt previous layer activation matrix
+        dW_curr = np.dot( dZ_curr, W_curr) # wrt current layer weight matrix 
+        db_curr = np.dot( Z_curr, b_curr) # wrt current layer bias matrix 
+
+        return dA_prev, dW_curr, db_curr
 
     def backprop(self, y: ArrayLike, y_hat: ArrayLike, cache: Dict[str, ArrayLike]):
         """
@@ -191,7 +219,8 @@ class NeuralNetwork:
             grad_dict: Dict[str, ArrayLike]
                 Dictionary containing the gradient information from this pass of backprop.
         """
-        pass
+        for i in range(len(self.arch)):
+            pass
 
     def _update_params(self, grad_dict: Dict[str, ArrayLike]):
         """
