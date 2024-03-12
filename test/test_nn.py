@@ -33,11 +33,11 @@ def test_forward(): # FINISH AFTER COMPLETING NN
 
 def test_single_backprop():
     # initalize test variables 
-    W_curr = np.array([2])
-    b_curr = np.array([0.5])
-    Z_curr = np.array([1])
-    A_prev = np.array([1])
-    dA_curr = np.array([1])
+    W_curr = np.array([[2,1],[1,1]])
+    b_curr = np.array([[0.5,1],[1,1]])
+    Z_curr = np.array([[1,1],[1,1]])
+    A_prev = np.array([[1,1],[1,1]])
+    dA_curr = np.array([[1,1],[1,1]])
     activation_relu = "relu"
     activation_sigmoid = "sigmoid"
 
