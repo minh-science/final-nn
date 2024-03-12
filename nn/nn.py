@@ -503,7 +503,7 @@ class NeuralNetwork:
         """
         # mean squared error equation 
         # MSE(y, y_hat) = \frac{1}{N} \Sum_1^N{ (y - y_hat)^2 }
-        loss = np.mean( (y - y_hat)**2 )
+        loss = (1/self._batch_size) * (y - y_hat)**2 
         return loss
 
     def _mean_squared_error_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike: # COMPLETE
@@ -523,5 +523,5 @@ class NeuralNetwork:
         # derivative of mean squared error (with resepct to y_hat)
         # MSE(y, y_hat) = \frac{1}{N} \Sum_1^N{ (y - y_hat)^2 }
         # \frac{ \partial MSE(y,y_hat)}{\partial y_hat} = \frac{-2}{N} (y - y_hat)
-        dA = -2/self._batch_size * (y - y_hat) 
+        dA = (-2/self._batch_size) * (y - y_hat) 
         return dA

@@ -79,17 +79,20 @@ def test_mean_squared_error(): # COMPLETE
     # test for MSE = 0
     y_test_0 = np.array([1,2,3,4,5])
     y_hat_test_0 = np.array([1,2,3,4,5])
-    MSE_truth_0 = 0
+    MSE_truth_0 = np.zeros_like(y_test_0)
+    nn_test._batch_size = 5
     MSE_test_0 = nn_test._mean_squared_error(y = y_test_0, y_hat= y_hat_test_0)
-    assert MSE_truth_0 == MSE_test_0, "minimum squared error does not return zero for y = y_hat"
+    assert np.allclose( MSE_truth_0, MSE_test_0), "minimum squared error does not return zero for y = y_hat"
 
     # test MSE by comparing with sklearn MSE and calculated MSE 
     y_test = np.array([1, 0, 0])
     y_hat_test = np.array([2, 1, 4])
     MSE_truth = sklearn.metrics.mean_squared_error(y_true= y_test, y_pred=y_hat_test) 
     MSE_calc = 6 # should return (1 + 1 + 16)/3 = 6
+    nn_test._batch_size = 3
     MSE_test = nn_test._mean_squared_error(y = y_test, y_hat= y_hat_test)
-    assert MSE_truth == MSE_test and MSE_calc == MSE_test, "minimum squared error does not return correct result"
+    print(np.sum(MSE_test))
+    assert np.allclose(MSE_truth, np.sum(MSE_test) ) and np.allclose(MSE_calc, np.sum(MSE_test)), "minimum squared error does not return correct result"
 test_mean_squared_error()
 
 
