@@ -43,7 +43,6 @@ def test_single_backprop():
 
     # check if single backprop works on test variables
     bp_relu_test = nn_test._single_backprop(W_curr, b_curr, Z_curr, A_prev, dA_curr, activation_relu)
-    print(bp_relu_test)
 test_single_backprop()
 
 def test_predict():
@@ -53,6 +52,7 @@ def test_binary_cross_entropy():  # COMPLETE
     # create new y and y_hat with a known loss function value
     y_true_pytest = np.array([0.5])
     y_pred_pytest = np.array([0.5])
+    nn_test._batch_size = 1
     loss_truth = 0.69314718056
 
     # check if binary cross entropy function returns values close to true values 
