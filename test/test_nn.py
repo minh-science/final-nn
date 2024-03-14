@@ -10,6 +10,7 @@ nn_test = nn.NeuralNetwork(nn_arch=[{'input_dim': 64, 'output_dim': 32, 'activat
                             lr = 0.001, seed = 42, batch_size= 10, epochs=3, loss_function="relu", )
 
 def test_single_forward(): # COMPLETE
+    # test in one dimension 
     W = np.array([2])
     b = np.array([0.5])
     a = np.array([1])
@@ -91,7 +92,7 @@ def test_mean_squared_error(): # COMPLETE
     MSE_calc = 6 # should return (1 + 1 + 16)/3 = 6
     nn_test._batch_size = 3
     MSE_test = nn_test._mean_squared_error(y = y_test, y_hat= y_hat_test)
-    print(np.sum(MSE_test))
+    # print(np.sum(MSE_test))
     assert np.allclose(MSE_truth, np.sum(MSE_test) ) and np.allclose(MSE_calc, np.sum(MSE_test)), "minimum squared error does not return correct result"
 test_mean_squared_error()
 
