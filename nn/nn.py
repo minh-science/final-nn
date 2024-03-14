@@ -106,7 +106,7 @@ class NeuralNetwork:
             Z_curr: ArrayLike
                 Current layer linear transformed matrix.
         """
-        print(len(W_curr), len(b_curr), len(A_prev))
+        # print(W_curr.shape, b_curr.shape, A_prev.shape)
         # layer linear transformed matrix
         # z^{l+1} = W^{(l)} * a^{(l)} + b^{(l)}
         Z_curr = np.matmul( W_curr, A_prev ) + b_curr 
@@ -144,11 +144,12 @@ class NeuralNetwork:
         cache["A0"] = A # stores 0th activation matrix in cache as 0th hypothesis 
 
         # iterates through each layer, performs _single_forward 
-        for i in range(1, len(self.arch)):
+        # print("number of layers", len(self.arch))
+        for i in range(1, len(self.arch) + 1): # layer 0 is input 
             W_curr = self._param_dict['W' + str(i)]
             b_curr = self._param_dict['b' + str(i)]
             A_prev = A
-            activation = self.arch[i]["activation"]
+            activation = self.arch[i-1]["activation"]
             # print("FORWARD", "layer:", i, "len W:", len(W_curr), "len b:", len(b_curr), activation)
 
             A_next, Z_next = self._single_forward(W_curr, b_curr, A_prev, activation)
@@ -156,7 +157,7 @@ class NeuralNetwork:
             cache[f"Z{i}"] = Z_next
         output = A_next # outputs the final hypothesis matrix 
     
-        print("forward complete")
+        # print("forward complete")
         return output, cache
 
     def _single_backprop( # Hadamard product?
@@ -238,9 +239,9 @@ class NeuralNetwork:
         """
         grad_dict = {}
         num_layers = len(self.arch)
-
         A = cache["A" + str(num_layers)] # get output of final layer 
         Z = cache["Z" + str(num_layers)] # get output of final layer 
+        
 
         if self._loss_func == "_binary_cross_entropy": 
             dA_curr = self._binary_cross_entropy_backprop(y, y_hat)
@@ -279,7 +280,7 @@ class NeuralNetwork:
                 Dictionary containing the gradient information from most recent round of backprop.
         """
         # updates internal attributes: 
-        for i, layer in enumerate(self.arch):
+        for i in range(1,len(self.arch)+1):
             # update weights
             # W = W - \alpha \frac{\partial}{\partial W} J(W,b)
             self._param_dict['W' + str(i)] = self._param_dict['W' + str(i)] - self._lr * grad_dict["dW_curr" + str(i)] / self._batch_size 
@@ -323,11 +324,6 @@ class NeuralNetwork:
             # forward on training 
             y_train_hat, cache_train = self.forward(X_train)
             # loss of training
-            print(type(y_train_hat), type(cache_train))
-            print(len(y_train_hat), len(cache_train))
-
-
-
             if self._loss_func == "_binary_cross_entropy":
                 loss_train = self._binary_cross_entropy(y_train, y_train_hat)
             elif self._loss_func == "_mean_squared_error":
@@ -507,7 +503,6 @@ class NeuralNetwork:
             loss: float
                 Average loss of mini-batch.
         """
-        # print(len(y), len(y_hat))
         # mean squared error equation 
         # MSE(y, y_hat) = \frac{1}{N} \Sum_1^N{ (y - y_hat)^2 }
         loss = (1/self._batch_size) * np.sum((y - y_hat)**2 )
