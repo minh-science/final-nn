@@ -3,7 +3,6 @@ import pytest
 from nn import nn
 import numpy as np
 import sklearn.metrics
-
 import tensorflow as tf
 
 nn_test = nn.NeuralNetwork(nn_arch=[{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation': 'sigmoid'}],
