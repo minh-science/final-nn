@@ -51,10 +51,10 @@ def test_predict():
 
 def test_binary_cross_entropy():  # COMPLETE
     # create new y and y_hat with a known loss function value
-    y_true_pytest = np.array([0.5])
-    y_pred_pytest = np.array([0.5])
+    y_true_pytest = np.array([[0.5,0.5],[0.5,0.5]])
+    y_pred_pytest = np.array([[0.5,0.5],[0.5,0.5]])
     nn_test._batch_size = 1
-    loss_truth = 0.69314718056
+    loss_truth = 2.772588722239781
 
     # check if binary cross entropy function returns values close to true values 
     loss_pytest = nn_test._binary_cross_entropy(y= y_true_pytest, y_hat=y_pred_pytest) 
@@ -65,15 +65,15 @@ test_binary_cross_entropy()
 
 def test_binary_cross_entropy_backprop(): # COMPLETE
     # create new y and y_hat with a known loss function value
-    y_true_pytest = np.array([5])
-    y_pred_pytest = np.array([0.5])
-    dBCE_truth = -18
+    y_true_pytest = np.array([[0.5,0.5],[0.5,0.5]])
+    y_pred_pytest = np.array([[0.5,0.5],[0.5,0.5]])
+    dBCE_truth = np.zeros_like(y_true_pytest)
 
     # check if binary cross entropy backpropagation function returns values close to true values 
     dBCE_test = nn_test._binary_cross_entropy_backprop(y= y_true_pytest, y_hat=y_pred_pytest) 
     nn_test._batch_size = len(y_true_pytest)
     
-    assert dBCE_truth == dBCE_test, "binary cross entropy backpropagation does not return correct result"
+    assert np.allclose(dBCE_truth, dBCE_test), "binary cross entropy backpropagation does not return correct result"
 test_binary_cross_entropy_backprop()
 
 def test_mean_squared_error(): # COMPLETE
