@@ -1,6 +1,6 @@
 # TODO: import dependencies and write unit tests below
 import pytest
-from nn import nn
+from nn import (nn, io, preprocess)
 import numpy as np
 import sklearn.metrics
 import tensorflow as tf
@@ -130,8 +130,9 @@ def test_sample_seqs():
     pass
 
 def test_one_hot_encode_seqs():
-    pass
-
+    test_AGA = preprocess.one_hot_encode_seqs("AGA")
+    assert np.allclose(test_AGA, np.array([1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0]) ), "one hot encoding does not work correctly"
+test_one_hot_encode_seqs()
 
 # additional tests 
 def test_relu(): # COMPLETE

@@ -14,7 +14,7 @@ You will begin by finishing the API for generating fully connected neural networ
 
 ### For steps 2 and 3
 
-* Finish all methods with a `pass` statement in the `NeuralNetwork` class in the `nn.py` file.
+[X] Finish all methods with a `pass` statement in the `NeuralNetwork` class in the `nn.py` file.
 
 ### For step 3
 
@@ -34,12 +34,12 @@ You will train a 64x16x64 autoencoder on the [digits](https://scikit-learn.org/s
 ### To-do
 
 * Load the digits dataset through sklearn using <code><a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html">sklearn.datasets.load_digits()</a></code>.
-* Split the data into training and validation sets.
-* Generate an instance of your `NeuralNetwork` class with a 64x16x64 autoencoder architecture.
-* Train your autoencoder on the training data.
-* Plot your training and validation loss by epoch.
-* Quantify your average reconstruction error over the validation set.
-* Explain why you chose the hyperparameter values you did.
+[X] Split the data into training and validation sets.
+[X] Generate an instance of your `NeuralNetwork` class with a 64x16x64 autoencoder architecture.
+[X] Train your autoencoder on the training data.
+[X] Plot your training and validation loss by epoch.
+[X] Quantify your average reconstruction error over the validation set.
+[X] Explain why you chose the hyperparameter values you did.
 
 ## Step 3: make your classifier
 
@@ -74,11 +74,11 @@ You will implement a multi-layer fully connected neural network using your `Neur
 
 ### Autoencoder (10 points)
 
-* Read in data and generate training and validation sets (2 points)
-* Successfully train your autoencoder (4 points)
-* Plots of training and validation loss (2 points)
-* Quantification of reconstruction error (1 point)
-* Explanation of hyperparameters (1 point)
+[X] Read in data and generate training and validation sets (2 points)
+[X] Successfully train your autoencoder (4 points)
+[X] Plots of training and validation loss (2 points)
+[X] Quantification of reconstruction error (1 point)
+[X] Explanation of hyperparameters (1 point)
 
 ### Classifier (15 points)
 
