@@ -441,11 +441,11 @@ class NeuralNetwork:
         
         # edit values of y_hat to prevent divide by zero error
         epsilon = 1e-15  # small constant to avoid log(0)
-        for i in range(len(y_hat)):
-            if y[i] == 1:
-                y[i] -= epsilon
-            if y[i] == 0:
-                y[i] += epsilon
+        y[y == 1] -= epsilon
+        y[y == 0] += epsilon
+
+        y_hat[y_hat == 1] -= epsilon
+        y_hat[y_hat == 0] += epsilon
 
         # mean loss using binary cross entropy loss equation, np.log gives natrual log 
         loss = (-1/ int(self._batch_size)) * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
@@ -467,17 +467,11 @@ class NeuralNetwork:
         """
         # edit values of y and y_hat to prevent divide by zero error
         epsilon = 1e-15  # small constant to avoid divide by 0 error 
-        for i in range(len(y)):
-            if y[i] == 1:
-                y[i] -= epsilon
-            if y[i] == 0:
-                y[i] += epsilon
+        y[y == 1] -= epsilon
+        y[y == 0] += epsilon
 
-        for i in range(len(y)):
-            if y_hat[i] == 1:
-                y_hat[i] -= epsilon
-            if y_hat[i] == 0:
-                y_hat[i] += epsilon
+        y_hat[y_hat == 1] -= epsilon
+        y_hat[y_hat == 0] += epsilon
                 
         # derivative of binary cross entropy (with respect to A = y_hat)
         # L(y,y_hat) = - \frac{1}{N} \Sum^N_{i=1} { y * \log(y_hat) + (1 - y) * \log(1 - y_hat )   }
