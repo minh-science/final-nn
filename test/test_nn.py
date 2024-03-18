@@ -30,7 +30,7 @@ def test_forward(): # FINISH AFTER COMPLETING NN
     X = np.ones(64)
     # nn_arch_test = [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}]
     output, cache = nn_test.forward(X)
-# test_forward() # commented out for pytest xfail
+test_forward() # commented out for pytest xfail
 
 def test_single_backprop():
     # initalize test variables 
@@ -85,15 +85,13 @@ def test_mean_squared_error(): # COMPLETE
     MSE_test_0 = nn_test._mean_squared_error(y = y_test_0, y_hat= y_hat_test_0)
     assert np.allclose( MSE_truth_0, MSE_test_0), "minimum squared error does not return zero for y = y_hat"
 
-    # test MSE by comparing with sklearn MSE and calculated MSE 
-    y_test = np.array([1, 0, 0])
-    y_hat_test = np.array([2, 1, 4])
+    # test MSE by comparing with sklearn MSE 
+    y_test = np.array([[1, 0, 0],[1,1,1],[1,1,1]])
+    y_hat_test = np.array([[2, 1, 4],[1,1,1],[1,1,1]])
     MSE_truth = sklearn.metrics.mean_squared_error(y_true= y_test, y_pred=y_hat_test) 
-    MSE_calc = 6 # should return (1 + 1 + 16)/3 = 6
-    nn_test._batch_size = 3
+    nn_test._batch_size = 9
     MSE_test = nn_test._mean_squared_error(y = y_test, y_hat= y_hat_test)
-    # print(np.sum(MSE_test))
-    assert np.allclose(MSE_truth, np.sum(MSE_test) ) and np.allclose(MSE_calc, np.sum(MSE_test)), "minimum squared error does not return correct result"
+    assert np.allclose(MSE_truth, np.sum(MSE_test) ), "minimum squared error does not return correct result"
 test_mean_squared_error()
 
 

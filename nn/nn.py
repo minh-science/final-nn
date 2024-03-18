@@ -106,10 +106,9 @@ class NeuralNetwork:
             Z_curr: ArrayLike
                 Current layer linear transformed matrix.
         """
-        # print(W_curr.shape, b_curr.shape, A_prev.shape)
         # layer linear transformed matrix
         # z^{l+1} = W^{(l)} * a^{(l)} + b^{(l)}
-        Z_curr = np.matmul( W_curr, A_prev ) + b_curr 
+        Z_curr = np.dot(W_curr, A_prev ) + b_curr 
 
         # activation matrix of current layer Z_curr
         # a^{(l+1)} = f(z^{(l + 1)})
@@ -137,30 +136,26 @@ class NeuralNetwork:
         """
         # example architecture:
         # [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation': 'sigmoid'}]
-        
-        A = X.T # A is current hypothesis matrix
-        cache = {} # cache is a dictionary of Z and A matrices
 
-        cache["A0"] = A # stores 0th activation matrix in cache as 0th hypothesis 
+        cache = {} # cache is a dictionary of Z and A matrices
+        cache["A0"] = X.T # stores 0th activation matrix in cache as 0th hypothesis 
+        
+        A = cache["A0"] # initalize the input activation matrix 
 
         # iterates through each layer, performs _single_forward 
-        # print("number of layers", len(self.arch))
         for i in range(1, len(self.arch) + 1): # layer 0 is input 
             W_curr = self._param_dict['W' + str(i)]
             b_curr = self._param_dict['b' + str(i)]
             A_prev = A
             activation = self.arch[i-1]["activation"]
-            # print("FORWARD", "layer:", i, "len W:", len(W_curr), "len b:", len(b_curr), activation)
-
-            A_next, Z_next = self._single_forward(W_curr, b_curr, A_prev, activation)
-            cache[f"A{i}"] = A_next 
-            cache[f"Z{i}"] = Z_next
-        output = A_next # outputs the final hypothesis matrix 
-    
-        # print("forward complete")
+            # print("FORWARD", "layer:", i, "len W:", len(W_curr), "len b:", len(b_curr), 'len A_prev:', len(A_prev), activation)
+            A, Z = self._single_forward(W_curr, b_curr, A_prev, activation)
+            cache[f"A{i}"] = A
+            cache[f"Z{i}"] = Z
+        output = A # outputs the final activation matrix 
         return output, cache
 
-    def _single_backprop( # Hadamard product?
+    def _single_backprop( # Hadamard product
         self,
         W_curr: ArrayLike,
         b_curr: ArrayLike,
@@ -263,7 +258,7 @@ class NeuralNetwork:
             dA_prev, dW_curr, db_curr = self._single_backprop(W_curr, b_curr, Z_curr, A_prev, dA_curr, activation_curr) # check this ???
 
             # add to grad_dict
-            grad_dict["dA_prev" + str(i-1)] = dA_prev # dA previous
+            grad_dict["dA_prev" + str(i)] = dA_prev # dA previous
             grad_dict["dW_curr" + str(i)] = dW_curr 
             grad_dict["db_curr" + str(i)] = db_curr
 
@@ -323,6 +318,8 @@ class NeuralNetwork:
         for epoch in range(self._epochs):
             # forward on training 
             y_train_hat, cache_train = self.forward(X_train)
+            y_val_hat, cache_val = self.forward(X_val)
+
             # loss of training
             if self._loss_func == "_binary_cross_entropy":
                 loss_train = self._binary_cross_entropy(y_train, y_train_hat)
@@ -358,7 +355,7 @@ class NeuralNetwork:
                 Prediction from the model.
         """
         output, cache = self.forward(X)
-        return output
+        return output.T # check if this should be .T
 
     def _sigmoid(self, Z: ArrayLike) -> ArrayLike:  # COMPLETE
         """
@@ -451,7 +448,7 @@ class NeuralNetwork:
                 y[i] += epsilon
 
         # mean loss using binary cross entropy loss equation, np.log gives natrual log 
-        loss = -1/self._batch_size * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
+        loss = (-1/ int(self._batch_size)) * np.sum( y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat)) 
         return loss
 
     def _binary_cross_entropy_backprop(self, y: ArrayLike, y_hat: ArrayLike) -> ArrayLike: # COMPLETE
@@ -486,7 +483,7 @@ class NeuralNetwork:
         # L(y,y_hat) = - \frac{1}{N} \Sum^N_{i=1} { y * \log(y_hat) + (1 - y) * \log(1 - y_hat )   }
         # \frac{\partial L}{\partial y_hat} =  \left( ( y * 1/y_hat ) + (1 - y) \frac{-1}{1 - y_hat} \right) (- \frac{1}{N})
         # = - \frac{1}{N} ( \frac{y}{y_hat} - \frac{1 - y}{1 -y_hat} )
-        dA = - 1/self._batch_size * ( np.divide(y, y_hat) - np.divide( 1 - y, 1 - y_hat ) ) # N is batch size 
+        dA = (- 1/self._batch_size) * ( np.divide(y, y_hat) - np.divide( 1 - y, 1 - y_hat ) ) # N is batch size 
         return dA
 
     def _mean_squared_error(self, y: ArrayLike, y_hat: ArrayLike) -> float: # COMPLETE
