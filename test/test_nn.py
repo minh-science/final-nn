@@ -23,15 +23,16 @@ def test_single_forward(): # COMPLETE
     assert np.allclose( sf_sigmoid_truth, nn_test._single_forward(W,b,a,activation_sigmoid) ), "error in _single_forward (sigmoid activation)"
 test_single_forward()
 
-# @pytest.mark.xfail # should pass for only the first layer (64) for now, need to change this to work on second layer (32)
 def test_forward(): # COMPLETE
     # input nn_arch from description of nn_arch
-    X = np.ones(64)
+    X = np.ones((64,64))
     # nn_arch_test = [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}]
     output, cache = nn_test.forward(X)
+    assert np.allclose(output, np.ones_like(output)) == False, "forward pass did not change input values"
+    assert 'A0' and 'A1' and 'Z1' and 'A2' and 'Z2' in cache.keys(), "forward pass did not create activation matrices"
 test_forward() 
 
-def test_single_backprop():
+def test_single_backprop(): # COMPLETE
     # initalize test variables 
     W_curr = np.array([[2,1],[1,1]])
     b_curr = np.array([[0.5,1],[1,1]])
@@ -43,10 +44,16 @@ def test_single_backprop():
 
     # check if single backprop works on test variables
     bp_relu_test = nn_test._single_backprop(W_curr, b_curr, Z_curr, A_prev, dA_curr, activation_relu)
+    assert np.allclose(bp_relu_test[0],  np.array([[3, 3],[2, 2]])), "single backprop did not return correct dA_prev"
+    assert np.allclose(bp_relu_test[1], np.array([[2, 2],[2, 2]] )), "single backprop did not return correct dW_curr"
+    assert np.allclose(bp_relu_test[2], np.array([[2],[2]])), "single backprop did not return correct db_curr"
 test_single_backprop()
 
-def test_predict():
-    pass
+def test_predict(): # COMPLETE  
+    X = np.ones((64,64))
+    pred = nn_test.predict(X)
+    assert np.allclose(pred, np.ones_like(pred)) == False, "Prediction was not successful"
+test_predict()
 
 def test_binary_cross_entropy():  # COMPLETE
     # create new y and y_hat with a known loss function value
