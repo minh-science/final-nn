@@ -127,11 +127,13 @@ def test_mean_squared_error_backprop(): # COMPLETE
 test_mean_squared_error_backprop()
 
 def test_sample_seqs():
-    pass
+    t1, t2 = preprocess.sample_seqs(["yes", "no"], [1, 0])
+    assert len(t1) == len(t2)
+test_sample_seqs()
 
 def test_one_hot_encode_seqs():
     test_AGA = preprocess.one_hot_encode_seqs("AGA")
-    assert np.allclose(test_AGA, np.array([1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0]) ), "one hot encoding does not work correctly"
+    assert np.allclose(test_AGA, np.array([[1., 0., 0., 0.],[0., 0., 0., 1.],[1., 0., 0., 0.]]) ), "one hot encoding does not work correctly"
 test_one_hot_encode_seqs()
 
 # additional tests 

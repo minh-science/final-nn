@@ -14,12 +14,12 @@ You will begin by finishing the API for generating fully connected neural networ
 
 ### For steps 2 and 3
 
-[X] Finish all methods with a `pass` statement in the `NeuralNetwork` class in the `nn.py` file.
+[x] Finish all methods with a `pass` statement in the `NeuralNetwork` class in the `nn.py` file.
 
 ### For step 3
 
-* Finish the `sample_seqs` function in the `preprocess.py` file.
-* Finish the `one_hot_encode_seqs` function in the `preprocess.py` file.
+[x] Finish the `sample_seqs` function in the `preprocess.py` file.
+[x] Finish the `one_hot_encode_seqs` function in the `preprocess.py` file.
 
 ## Step 2: make your autoencoder
 
@@ -34,12 +34,12 @@ You will train a 64x16x64 autoencoder on the [digits](https://scikit-learn.org/s
 ### To-do
 
 * Load the digits dataset through sklearn using <code><a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html">sklearn.datasets.load_digits()</a></code>.
-[X] Split the data into training and validation sets.
-[X] Generate an instance of your `NeuralNetwork` class with a 64x16x64 autoencoder architecture.
-[X] Train your autoencoder on the training data.
-[X] Plot your training and validation loss by epoch.
-[X] Quantify your average reconstruction error over the validation set.
-[X] Explain why you chose the hyperparameter values you did.
+[x] Split the data into training and validation sets.
+[x] Generate an instance of your `NeuralNetwork` class with a 64x16x64 autoencoder architecture.
+[x] Train your autoencoder on the training data.
+[x] Plot your training and validation loss by epoch.
+[x] Quantify your average reconstruction error over the validation set.
+[x] Explain why you chose the hyperparameter values you did.
 
 ## Step 3: make your classifier
 
@@ -53,32 +53,32 @@ You will implement a multi-layer fully connected neural network using your `Neur
 
 ### To-do
 
-* Use the `read_text_file` function from `io.py` to read in the 137 positive Rap1 motif examples.
-* Use the `read_fasta_file` function from `io.py` to read in all the negative examples. Note that these sequences are much longer than the positive sequences, so you will need to process them to the same length.
-* Balance your classes using your `sample_seq` function and explain why you chose the sampling scheme you did.
-* One-hot encode the data using your `one_hot_encode_seqs` function.
-* Split the data into training and validation sets.
-* Generate an instance of your `NeuralNetwork` class with an appropriate architecture.
-* Train your neural network on the training data.
-* Plot your training and validation loss by epoch.
-* Report the accuracy of your classifier on your validation dataset.
-* Explain your choice of loss function and hyperparameters.
+[x] Use the `read_text_file` function from `io.py` to read in the 137 positive Rap1 motif examples.
+[x] Use the `read_fasta_file` function from `io.py` to read in all the negative examples. Note that these sequences are much longer than the positive sequences, so you will need to process them to the same length.
+[x] Balance your classes using your `sample_seq` function and explain why you chose the sampling scheme you did.
+[x] One-hot encode the data using your `one_hot_encode_seqs` function.
+[x] Split the data into training and validation sets.
+[x] Generate an instance of your `NeuralNetwork` class with an appropriate architecture.
+[x] Train your neural network on the training data.
+[x] Plot your training and validation loss by epoch.
+[x] Report the accuracy of your classifier on your validation dataset.
+[x] Explain your choice of loss function and hyperparameters.
 
 ## Grading (50 points)
 
 ### Neural network implementation (15 points)
 
-* Proper implementation of methods in `NeuralNetwork` class (13 points)
+* Proper implementation of methods in `NeuralNetwork` class (13 points) 
 * Proper implementation of `sample_seqs` function (1 point)
 * Proper implementation of `one_hot_encode_seqs` function (1 point)
 
 ### Autoencoder (10 points)
 
-[X] Read in data and generate training and validation sets (2 points)
-[X] Successfully train your autoencoder (4 points)
-[X] Plots of training and validation loss (2 points)
-[X] Quantification of reconstruction error (1 point)
-[X] Explanation of hyperparameters (1 point)
+* Read in data and generate training and validation sets (2 points)
+* Successfully train your autoencoder (4 points)
+* Plots of training and validation loss (2 points)
+* Quantification of reconstruction error (1 point)
+* Explanation of hyperparameters (1 point)
 
 ### Classifier (15 points)
 
