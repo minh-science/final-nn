@@ -8,7 +8,7 @@ import tensorflow as tf
 nn_test = nn.NeuralNetwork(nn_arch=[{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation': 'sigmoid'}],
                             lr = 0.001, seed = 42, batch_size= 10, epochs=3, loss_function="relu", )
 
-def test_single_forward(): # COMPLETE
+def test_single_forward(): 
     # test in one dimension 
     W = np.array([2])
     b = np.array([0.5])
@@ -23,7 +23,7 @@ def test_single_forward(): # COMPLETE
     assert np.allclose( sf_sigmoid_truth, nn_test._single_forward(W,b,a,activation_sigmoid) ), "error in _single_forward (sigmoid activation)"
 test_single_forward()
 
-def test_forward(): # COMPLETE
+def test_forward(): 
     # input nn_arch from description of nn_arch
     X = np.ones((64,64))
     # nn_arch_test = [{'input_dim': 64, 'output_dim': 32, 'activation': 'relu'}, {'input_dim': 32, 'output_dim': 8, 'activation:': 'sigmoid'}]
@@ -32,7 +32,7 @@ def test_forward(): # COMPLETE
     assert 'A0' and 'A1' and 'Z1' and 'A2' and 'Z2' in cache.keys(), "forward pass did not create activation matrices"
 test_forward() 
 
-def test_single_backprop(): # COMPLETE
+def test_single_backprop(): 
     # initalize test variables 
     W_curr = np.array([[2,1],[1,1]])
     b_curr = np.array([[0.5,1],[1,1]])
@@ -49,13 +49,14 @@ def test_single_backprop(): # COMPLETE
     assert np.allclose(bp_relu_test[2], np.array([[2],[2]])), "single backprop did not return correct db_curr"
 test_single_backprop()
 
-def test_predict(): # COMPLETE  
+def test_predict():   
+    # test if predict() returns values different from its input
     X = np.ones((64,64))
     pred = nn_test.predict(X)
     assert np.allclose(pred, np.ones_like(pred)) == False, "Prediction was not successful"
 test_predict()
 
-def test_binary_cross_entropy():  # COMPLETE
+def test_binary_cross_entropy():  
     # create new y and y_hat with a known loss function value
     y_true_pytest = np.array([[0.5,0.5],[0.5,0.5]])
     y_pred_pytest = np.array([[0.5,0.5],[0.5,0.5]])
@@ -69,7 +70,7 @@ def test_binary_cross_entropy():  # COMPLETE
     assert np.isclose(loss_truth, loss_pytest, 0.000001), "binary cross entropy does not return correct result"
 test_binary_cross_entropy()
 
-def test_binary_cross_entropy_backprop(): # COMPLETE
+def test_binary_cross_entropy_backprop(): 
     # create new y and y_hat with a known loss function value
     y_true_pytest = np.array([[0.5,0.5],[0.5,0.5]])
     y_pred_pytest = np.array([[0.5,0.5],[0.5,0.5]])
@@ -82,7 +83,7 @@ def test_binary_cross_entropy_backprop(): # COMPLETE
     assert np.allclose(dBCE_truth, dBCE_test), "binary cross entropy backpropagation does not return correct result"
 test_binary_cross_entropy_backprop()
 
-def test_mean_squared_error(): # COMPLETE
+def test_mean_squared_error(): 
     # test for MSE = 0
     y_test_0 = np.array([1,2,3,4,5])
     y_hat_test_0 = np.array([1,2,3,4,5])
@@ -101,7 +102,7 @@ def test_mean_squared_error(): # COMPLETE
 test_mean_squared_error()
 
 
-def test_mean_squared_error_backprop(): # COMPLETE
+def test_mean_squared_error_backprop(): 
     # test for dMSE = 0 
     y_test_0 = np.array([1,2,3,4,5])
     y_hat_test_0 = np.array([1,2,3,4,5])
@@ -127,17 +128,19 @@ def test_mean_squared_error_backprop(): # COMPLETE
 test_mean_squared_error_backprop()
 
 def test_sample_seqs():
-    t1, t2 = preprocess.sample_seqs(["yes", "no"], [1, 0])
+    # check for correct dimensions of output, assure it works for different data types 
+    t1, t2 = preprocess.sample_seqs(["yes", "no", "yes", "no", "yes", "no"], [1, 0, 1, 0, 1, 0, 1, 0])
     assert len(t1) == len(t2)
 test_sample_seqs()
 
 def test_one_hot_encode_seqs():
+    # check if one hot encoding returns correct result for a known sequence and encoding
     test_AGA = preprocess.one_hot_encode_seqs("AGA")
     assert np.allclose(test_AGA, np.array([[1., 0., 0., 0.],[0., 0., 0., 1.],[1., 0., 0., 0.]]) ), "one hot encoding does not work correctly"
 test_one_hot_encode_seqs()
 
 # additional tests 
-def test_relu(): # COMPLETE
+def test_relu(): 
     matrix = np.array([-1, 0, 1, 2])
     _relu_truth = [0, 0, 1, 2]
     _relu_test = nn_test._relu(matrix) 
@@ -145,7 +148,7 @@ def test_relu(): # COMPLETE
         assert _relu_truth[i] == _relu_test[i]
 test_relu()
 
-def test_relu_backprop(): # COMPLETE
+def test_relu_backprop(): 
     matrix = np.array([-1, 0, 1, 2])
     dA_backprop = np.array([1, 1, 1, 1])
     _relu_backprop_truth = [0, 0, 1, 1]
